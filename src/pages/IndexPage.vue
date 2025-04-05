@@ -9,7 +9,7 @@
           icon="add"
           />
           <q-btn
-          v-show="!isRemovingFood"
+          v-show="!isRemovingFood && foodItems.length"
           class="q-mb-md"
           color="negative"
           outline 
@@ -18,7 +18,7 @@
           icon="delete"
           />
           <q-btn
-          v-show="isRemovingFood"
+          v-show="isRemovingFood && foodItems.length"
           class="q-mb-md"
           color="warning"
           label="Cancel"
@@ -173,6 +173,9 @@ function removeFoodItem(item: FoodItem) {
          const index = foodItems.value.findIndex((food) => food.id === item.id);
   if (index !== -1) {
     foodItems.value.splice(index, 1);
+
+    if (foodItems.value.length === 0) isRemovingFood.value = false;
+  
   }
 
     store.resetIntakes();

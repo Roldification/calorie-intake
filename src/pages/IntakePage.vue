@@ -1,5 +1,6 @@
 <template>
    <q-page class="q-pa-md">
+    <q-btn rounded @click="router.back" icon="arrow_back"></q-btn>
     <div v-if="store.intakes.length" class="q-pa-md items-center justify-center q-gutter-md" style="display: flex; flex-direction: column;">
         <q-btn label="Reset Intake" icon="restart_alt" @click="store.resetIntakes" />
         <q-table
@@ -22,5 +23,8 @@
 
 <script setup lang="ts">
 import { useCounterStore } from 'src/stores/example-store';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 const store = useCounterStore();
 </script>
