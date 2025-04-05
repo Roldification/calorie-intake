@@ -42,6 +42,7 @@ export default defineConfigWithVueTs(
         'error',
         { prefer: 'type-imports' }
       ],
+      '@typescript-eslint/no-floating-promises': 'off',
     }
   },
   // https://github.com/vuejs/eslint-config-typescript
