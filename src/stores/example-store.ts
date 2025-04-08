@@ -1,4 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
+import type { Intakes } from 'src/types/types';
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({
@@ -7,12 +8,7 @@ export const useCounterStore = defineStore('counter', {
       {value: 'g', label: 'g'},
       {value: 'oz', label: 'oz'},
     ],
-    intakes: <{
-      food: string,
-      amount: number,
-      uom: string,
-      calories: number,
-    }[]>[],
+    intakes: <Intakes[]>[],
   }),
 
   getters: {

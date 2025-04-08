@@ -68,6 +68,8 @@
               />
               <q-input
                 filled
+                type="number"
+                :min="0"
                 v-model="foodItem.calories"
                 label="Calories"
                 lazy-rules
@@ -75,6 +77,8 @@
               />
               <q-input
                 filled
+                type="number"
+                :min="0"
                 v-model="foodItem.per"
                 label="Per"
                 lazy-rules
@@ -108,6 +112,8 @@
           <div>
             <q-input
               filled
+              type="number"
+              :min="0"
               v-model="intakeProps.amount"
               :label="`Amount (${intakeProps.uom})`"
               lazy-rules
@@ -233,7 +239,6 @@ function addIntake(row: FoodItem) {
 }
 
 function saveIntake() {
-  console.log('Saving intake:', intakeProps.value);
   store.addIntake({
     food: intakeProps.value.food,
     amount: Number(intakeProps.value.amount) || 0,
@@ -241,6 +246,7 @@ function saveIntake() {
     calories: computeCalories(intakeProps.value.calories || 0, intakeProps.value.amount || 0, intakeProps.value.per),
   });
   isAddingIntake.value = false;
+  intakeProps.value.amount = null;
 }
 
 function computeCalories(kCal: number, amount: number, per: number) : number {

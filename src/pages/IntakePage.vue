@@ -1,17 +1,40 @@
 <template>
    <q-page class="q-pa-md">
-    <q-btn rounded @click="router.back" icon="arrow_back"></q-btn>
+    
     <div v-if="store.intakes.length" class="q-pa-md items-center justify-center q-gutter-md" style="display: flex; flex-direction: column;">
         <q-btn label="Reset Intake" icon="restart_alt" @click="store.resetIntakes" />
         <q-table
+        style="width: 100%;"
             :rows="store.intakes"
             row-key="id"
             class="q-mb-md"
             bordered
             separator="horizontal"
-        />
+            :columns="columns"
+        >
+
+
+            <template v-slot:body="props">
+                <q-tr :props="props">
+                    <q-td key="food" :props="props" class="text-left">
+                       {{ props.row.food }} sdf
+                       <div style="font-size: smaller;">{{ props.row.amount }}{{ props.row.uom }}</div>
+                    </q-td>
+                    <q-td key="calories" :props="props" class="text-right">
+                        {{ props.row.calories }} kCal
+                        
+                    </q-td>
+                    <q-td key="actions" :props="props" class="text-center">
+                        <q-btn color="negative" icon="delete" @click="store.removeIntake(props.row.id)" flat round size="md" />
+                    </q-td>
+                </q-tr>
+            </template>
+        </q-table>
         <div>
-            Total Calories: {{ store.intakes.reduce((acc, item) => acc + item.calories, 0) }} kCal
+            Total Calories: {{ (store.intakes.reduce((acc, item) => acc + item.calories, 0)).toFixed(2) }} kCal
+        </div>
+        <div>
+            <q-btn @click="saveDailyIntake" label="Record Intake" icon="save" class="q-mt-md" color="primary" />
         </div>
     </div>
     <div v-else class="row q-pa-md items-center justify-center q-gutter-md">
@@ -23,8 +46,55 @@
 
 <script setup lang="ts">
 import { useCounterStore } from 'src/stores/example-store';
-import { useRouter } from 'vue-router';
+import type { Column, DailyIntake } from 'src/types/types';
+import { StorageSerializers, useStorage } from '@vueuse/core';
 
-const router = useRouter();
+const columns:  Column[] = [
+    { name: 'food', label: 'Food Item', align: 'left', field: 'food', style: 'max-width: 35vw; overflow: hidden; text-overflow: ellipsis !important; ' },
+    { name: 'calories', label: 'Calories', field: 'calories' },
+    { name: 'actions', label: 'Actions',  field: 'actions' }
+]
+
+const dailyIntake = useStorage<DailyIntake | null>('dailyIntake', null, undefined, {serializer: StorageSerializers.object}) ;
+
+function saveDailyIntake() {
+
+    if (!store.intakes.length) return; // No intakes to save
+
+    const dateKey = formatDateForKey(new Date());
+    console.log('date key:', dateKey);
+    const intakes = store.intakes.map(intake => ({
+        timeTaken: new Date(),
+        food: intake.food,
+        amount: intake.amount,
+        uom: intake.uom,
+        calories: intake.calories,
+    }));
+    const dailyIntakeData: DailyIntake = {
+        [dateKey]: intakes
+    };
+
+    if (dailyIntake.value && dailyIntake.value[dateKey]) {
+        // If the date key already exists, append the new intake data to it
+        dailyIntake.value[dateKey].push(...intakes);
+    } else {
+        // If the date key doesn't exist, create a new entry
+        console.log('Adding new daily intake data:', dailyIntakeData);
+        dailyIntake.value = dailyIntakeData;
+    }
+
+    // Reset the intakes in the store after saving
+    store.resetIntakes();
+
+}
+
+function formatDateForKey(date: Date) {
+    // format the date to YYYYMMDD
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}${month}${day}`;
+}
+
 const store = useCounterStore();
 </script>
