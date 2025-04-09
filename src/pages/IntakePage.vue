@@ -61,7 +61,7 @@ function saveDailyIntake() {
 
     if (!store.intakes.length) return; // No intakes to save
 
-    const dateKey = formatDateForKey(new Date()) + 'a';
+    const dateKey = formatDateForKey(new Date());
     console.log('date key:', dateKey);
     const intakes = store.intakes.map(intake => ({
         timeTaken: new Date(),
