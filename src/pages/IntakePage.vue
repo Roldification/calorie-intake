@@ -61,7 +61,7 @@ function saveDailyIntake() {
 
     if (!store.intakes.length) return; // No intakes to save
 
-    const dateKey = formatDateForKey(new Date());
+    const dateKey = formatDateForKey(new Date()) + 'a';
     console.log('date key:', dateKey);
     const intakes = store.intakes.map(intake => ({
         timeTaken: new Date(),
@@ -74,9 +74,12 @@ function saveDailyIntake() {
         [dateKey]: intakes
     };
 
-    if (dailyIntake.value && dailyIntake.value[dateKey]) {
+    if (dailyIntake.value) {
         // If the date key already exists, append the new intake data to it
-        dailyIntake.value[dateKey].push(...intakes);
+        if (dailyIntake.value[dateKey])
+            dailyIntake.value[dateKey].push(...intakes);
+        else 
+            dailyIntake.value[dateKey] = intakes; // Add new date key with intakes
     } else {
         // If the date key doesn't exist, create a new entry
         console.log('Adding new daily intake data:', dailyIntakeData);

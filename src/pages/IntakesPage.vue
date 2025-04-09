@@ -3,7 +3,7 @@
        <div v-for="(value, keyx) of Object.keys(dailyIntake ?? {})" :key="keyx" >
             <q-card v-if="dailyIntake" class="q-mb-md" style="width: 100%; max-width: 400px;">
                 <q-card-section>
-                    <div class="text-h6">{{ value }}</div>
+                    <div class="" style="display: flex; width: 100%; flex-direction: row;  justify-content: space-between; "><span class="text-h6">{{ value }}</span> <span>{{ getCalorieTotal(dailyIntake[value]) }} kCal</span></div>
                     <div v-for="(intake, index) in dailyIntake[value]" :key="index" class="q-mb-md">
                         <div class="text-h6">{{ intake.food }}</div>
                         <div class="text-subtitle2">Calories: {{ intake.calories }} kCal</div>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DailyIntake } from 'src/types/types';
+import type { DailyIntake, Intakes } from 'src/types/types';
 import { StorageSerializers, useStorage } from '@vueuse/core';
 
 const dailyIntake = useStorage<DailyIntake | null>('dailyIntake', null, undefined, {serializer: StorageSerializers.object}) ;
@@ -31,6 +31,12 @@ function formatDateTime(date: Date): string {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
     return new Date(date).toLocaleString('en-US', options);
 }
+
+function getCalorieTotal(intake: Intakes[] | undefined): number {
+    if (!intake) return 0; // Return 0 if intake is undefined or empty
+    return Number(intake.reduce((total, item) => total + item.calories, 0).toFixed(2));
+}
+
 
 
 </script>

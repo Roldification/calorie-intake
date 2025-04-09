@@ -19,7 +19,7 @@
           <q-btn @click="router.push('/intake')" dense round icon="restaurant" class="q-ml-md">
       <q-badge v-if="store.intakes.length" color="red" floating>{{ store.intakes.length }}</q-badge>
     </q-btn>
-          <span>v.1</span></div>
+          <span>v.1a</span></div>
       </q-toolbar>
     </q-header>
 
