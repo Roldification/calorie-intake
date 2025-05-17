@@ -12,7 +12,7 @@
               store.intakes.length
             }}</q-badge>
           </q-btn>
-          <span>v.1a</span>
+          <span>v.1b</span>
         </div>
       </q-toolbar>
     </q-header>
@@ -33,7 +33,7 @@
             <q-item-label caption>Import Data from external sources</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable v-ripple @click="router.push('/import-food')">
+        <q-item clickable v-ripple @click="router.push('/export-data')">
           <q-item-section>
             <q-item-label>Export Data</q-item-label>
             <q-item-label caption>Export Data to external devices</q-item-label>

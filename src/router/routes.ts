@@ -9,6 +9,7 @@ const routes: RouteRecordRaw[] = [
       { path: 'intake', component: () => import('pages/IntakePage.vue') },
       { path: 'my-intakes', component: () => import('pages/IntakesPage.vue') },
       { path: 'import-food', component: () => import('pages/ImportFood.vue') },
+      { path: 'export-data', component: () => import('pages/ExportDataPage.vue') },
     ],
   },
 
