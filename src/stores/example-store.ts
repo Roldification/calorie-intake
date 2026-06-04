@@ -4,9 +4,9 @@ import type { Intakes } from 'src/types/types';
 export const useCounterStore = defineStore('counter', {
   state: () => ({
     counter: 0,
-    uoms: <{value: string, label: string}[]>[
-      {value: 'g', label: 'g'},
-      {value: 'oz', label: 'oz'},
+    uoms: <{ value: string; label: string }[]>[
+      { value: 'g', label: 'g' },
+      { value: 'oz', label: 'oz' },
     ],
     intakes: <Intakes[]>[],
   }),
@@ -20,11 +20,19 @@ export const useCounterStore = defineStore('counter', {
       this.counter++;
     },
 
-    addUOM(uom: {value: string, label: string}) {
-      this.uoms.push(uom);  
+    addUOM(uom: { value: string; label: string }) {
+      this.uoms.push(uom);
     },
 
-    addIntake(intake: {food: string, amount: number, uom: string, calories: number}) {
+    addIntake(intake: {
+      food: string;
+      amount: number;
+      uom: string;
+      calories: number;
+      protein?: number;
+      carbs?: number;
+      fat?: number;
+    }) {
       this.intakes.push(intake);
     },
 
@@ -34,7 +42,7 @@ export const useCounterStore = defineStore('counter', {
 
     resetIntakes() {
       this.intakes = [];
-    }
+    },
   },
 });
 

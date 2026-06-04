@@ -12,14 +12,14 @@
 // to match your app's branding.
 // Tip: Use the "Theme Builder" on Quasar's documentation website.
 
-$primary   : #1976D2;
-$secondary : #26A69A;
-$accent    : #9C27B0;
+$primary: #10b981; // Emerald Green (Accents, primary actions)
+$secondary: #06b6d4; // Cyan (Carbs)
+$accent: #6366f1; // Indigo (Protein)
 
-$dark      : #1D1D1D;
-$dark-page : #121212;
+$dark: #0f172a; // Slate 900 (Header, drawer, components)
+$dark-page: #070a13; // Slate 950 (Page background)
 
-$positive  : #21BA45;
-$negative  : #C10015;
-$info      : #31CCEC;
-$warning   : #F2C037;
+$positive: #10b981;
+$negative: #ef4444; // Coral Red (Deletes, removals)
+$info: #3b82f6; // Blue
+$warning: #f59e0b; // Amber (Fat)
