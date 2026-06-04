@@ -11,6 +11,9 @@
                         <div class="text-subtitle2">Time: {{ formatDateTime(intake.timeTaken) }}</div>
                     </div>
                 </q-card-section>
+                <q-card-actions align="right">
+                    <q-btn flat color="negative" icon="delete" label="Delete" @click="deleteIntake(value)" />
+                </q-card-actions>
             </q-card>
         </div>
 
@@ -36,6 +39,13 @@ function getCalorieTotal(intake: Intakes[] | undefined): number {
     if (!intake) return 0; // Return 0 if intake is undefined or empty
     return Number(intake.reduce((total, item) => total + item.calories, 0).toFixed(2));
 }
+
+function deleteIntake(dateKey: string) {
+    if (dailyIntake.value && dailyIntake.value[dateKey]) {
+        delete dailyIntake.value[dateKey];
+    }
+}
+
 
 
 
