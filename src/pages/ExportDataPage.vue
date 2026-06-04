@@ -1,28 +1,51 @@
 <template>
-  <q-page class="q-pa-md">
-    <q-card>
-      <q-card-section>
-        <p class="text-h6">Export Data</p>
-      </q-card-section>
+  <q-page class="q-pa-lg flex flex-center">
+    <div style="width: 100%; max-width: 600px">
+      <q-card class="glass-card q-pa-lg text-white">
+        <q-card-section class="q-pa-none q-mb-md">
+          <div class="row items-center q-mb-xs">
+            <q-icon name="download" color="primary" size="28px" class="q-mr-sm" />
+            <div class="text-h6 text-weight-bold">Export Food Library</div>
+          </div>
+          <div class="text-caption text-grey-5">
+            Export your custom food database to the clipboard so you can back it up or restore it on
+            other devices.
+          </div>
+        </q-card-section>
 
-      <!-- body -->
-      <q-card-section>
-        <q-checkbox
-          v-for="(item, key) in exportProps"
-          :key="key"
-          :label="item.label"
-          v-model="item.value"
-          :disable="!item.isActive"
-        >
-        </q-checkbox>
+        <q-card-section class="q-px-none q-py-sm">
+          <div class="q-gutter-y-sm q-mb-lg">
+            <q-checkbox
+              v-for="(item, key) in exportProps"
+              :key="key"
+              :label="item.label"
+              v-model="item.value"
+              :disable="!item.isActive"
+              dark
+              color="primary"
+              class="text-weight-medium"
+            >
+            </q-checkbox>
+          </div>
 
-        <div class="q-mt-md">
-          <q-btn @click="exportDataToClipboard" class="w-full" color="positive">
-            Copy to Clipboard
-          </q-btn>
-        </div>
-      </q-card-section>
-    </q-card>
+          <div>
+            <q-btn
+              unelevated
+              color="primary"
+              class="w-full q-py-sm text-weight-bold"
+              icon="content_copy"
+              label="Copy Backup JSON to Clipboard"
+              @click="exportDataToClipboard"
+              :disabled="foodItems.length === 0"
+            />
+          </div>
+
+          <div v-if="foodItems.length === 0" class="text-caption text-negative q-mt-sm text-center">
+            No food items found in library to export.
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -30,16 +53,9 @@
 import { ref } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { useQuasar } from 'quasar';
+import type { FoodItem } from 'src/types/types';
 
 const $q = useQuasar();
-
-type FoodItem = {
-  id: number;
-  name: string;
-  calories: number;
-  per: number;
-  uom: string;
-};
 
 const foodItems = useStorage<FoodItem[]>('foodItems', []);
 
@@ -58,21 +74,22 @@ const exportProps = ref<{
   intakes: {
     value: false,
     isActive: false,
-    label: 'Intakes',
+    label: 'Intake History logs (Coming Soon)',
   },
   food: {
-    value: false,
+    value: true,
     isActive: true,
-    label: 'Food Declarations',
+    label: 'Food Library declarations',
   },
 });
 
 function exportDataToClipboard() {
   if (!exportProps.value.food.value) {
     $q.notify({
-      message: 'Please select at least one type of data to Export',
-      color: 'negative',
+      message: 'Please select at least one type of data to export.',
+      color: 'warning',
       position: 'top',
+      icon: 'warning',
     });
     return;
   }
@@ -81,29 +98,31 @@ function exportDataToClipboard() {
     intakes: foodItems.value,
   };
 
-  const jsonStringExport = JSON.stringify(toBeExported);
+  const jsonStringExport = JSON.stringify(toBeExported, null, 2);
 
   navigator.clipboard
     .writeText(jsonStringExport)
     .then(() => {
       $q.notify({
-        message: 'Successfully copied the data to the clipboard',
+        message: 'Database backup copied to clipboard!',
         color: 'positive',
         position: 'top',
+        icon: 'done',
       });
     })
     .catch((err) => {
-      console.log(err);
+      console.error('Clipboard copy failed:', err);
       $q.notify({
         message: 'Failed to copy to clipboard',
         color: 'negative',
         position: 'top',
+        icon: 'error',
       });
     });
 }
 </script>
 
-<style>
+<style scoped>
 .w-full {
   width: 100%;
 }

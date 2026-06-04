@@ -1,17 +1,45 @@
 <template>
-  <q-page class="q-pa-md">
-    <q-card>
-      <q-card-section>
-        <p class="text-h6">Import Data</p>
-      </q-card-section>
+  <q-page class="q-pa-lg flex flex-center">
+    <div style="width: 100%; max-width: 600px">
+      <q-card class="glass-card q-pa-lg text-white">
+        <q-card-section class="q-pa-none q-mb-md">
+          <div class="row items-center q-mb-xs">
+            <q-icon name="upload_file" color="primary" size="28px" class="q-mr-sm" />
+            <div class="text-h6 text-weight-bold">Import Food Library</div>
+          </div>
+          <div class="text-caption text-grey-5">
+            Paste a backup JSON configuration below to restore your custom food database library.
+          </div>
+        </q-card-section>
 
-      <!-- the card body -->
-      <q-card-section>
-        <q-input type="textarea" v-model="importedData" label="Data"> </q-input>
-        <div class="q-pa-sm">size: {{ charSize }}</div>
-        <q-btn label="Import" @click="validateSchema"></q-btn>
-      </q-card-section>
-    </q-card>
+        <q-card-section class="q-px-none q-py-sm">
+          <q-input
+            type="textarea"
+            filled
+            dark
+            v-model="importedData"
+            label="JSON Data String"
+            rows="8"
+            class="q-mb-md"
+            style="font-family: monospace"
+          />
+          <div class="row justify-between items-center q-mt-sm">
+            <div class="text-caption text-grey-5">
+              Detected Size: <span class="text-weight-bold text-white">{{ charSize }}</span>
+            </div>
+            <q-btn
+              unelevated
+              color="primary"
+              label="Import Database"
+              icon="publish"
+              class="q-px-lg q-py-sm"
+              @click="validateSchema"
+              :disabled="!importedData"
+            />
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
@@ -20,23 +48,11 @@ import { ref, computed } from 'vue';
 import { z, ZodError } from 'zod';
 import { useQuasar } from 'quasar';
 import { useStorage } from '@vueuse/core';
-
-type FoodItem = {
-  id: number;
-  name: string;
-  calories: string;
-  per: string;
-  uom: string;
-};
+import type { FoodItem } from 'src/types/types';
 
 const $q = useQuasar();
 const importedData = ref<string | null>(null);
 const foodItems = useStorage<FoodItem[]>('foodItems', []);
-
-// watch(importedData, (value) => {
-//   console.log('something2', value);
-//   if (value) computeSize(value);
-// });
 
 const charSize = computed(() => {
   let size = 0;
@@ -47,15 +63,13 @@ const charSize = computed(() => {
 });
 
 function computeSize(chars: string): number {
-  const bytes = new TextEncoder().encode(chars).length;
-
-  return bytes;
+  return new TextEncoder().encode(chars).length;
 }
 
 function translateSize(size: number): string {
-  if (size < 1024) return size + 'bytes';
-  if (size < 1024 * 1024) return (size / 1024).toFixed(2) + 'KB';
-  return (size / (1024 * 1024)).toFixed(2) + 'MB';
+  if (size < 1024) return size + ' B';
+  if (size < 1024 * 1024) return (size / 1024).toFixed(2) + ' KB';
+  return (size / (1024 * 1024)).toFixed(2) + ' MB';
 }
 
 function validateSchema() {
@@ -66,7 +80,7 @@ function validateSchema() {
   try {
     parsedJson = JSON.parse(importedData.value);
   } catch (err: unknown) {
-    let errorMessage = 'Something went wrong';
+    let errorMessage = 'Failed to parse JSON string';
 
     if (err instanceof Error) errorMessage = err.message;
     else if (typeof err === 'string') errorMessage = err;
@@ -75,6 +89,7 @@ function validateSchema() {
       message: errorMessage,
       color: 'negative',
       position: 'top',
+      icon: 'error',
     });
 
     return;
@@ -86,9 +101,12 @@ function validateSchema() {
         .object({
           id: z.number(),
           name: z.string(),
-          calories: z.string(),
-          per: z.string(),
+          calories: z.coerce.number(),
+          per: z.coerce.number(),
           uom: z.string(),
+          protein: z.coerce.number().optional(),
+          carbs: z.coerce.number().optional(),
+          fat: z.coerce.number().optional(),
         })
         .strict(),
     ),
@@ -96,21 +114,26 @@ function validateSchema() {
 
   try {
     const parsedData = schema.parse(parsedJson);
+    foodItems.value = parsedData?.intakes as FoodItem[];
+    importedData.value = '';
+
     $q.notify({
-      message: 'good!',
+      message: `Successfully imported ${parsedData?.intakes.length} food items!`,
       position: 'top',
       color: 'positive',
+      icon: 'done',
     });
-    console.log('parsedData', parsedData);
-
-    foodItems.value = parsedData?.intakes;
   } catch (error: unknown) {
-    const errorMessage = error instanceof ZodError ? error?.message : 'Something went wrong';
-
+    const errorMessage =
+      error instanceof ZodError
+        ? 'JSON format validation failed. Ensure correct field names and data types.'
+        : 'Something went wrong during import';
+    console.error('Validation error:', error);
     $q.notify({
       message: errorMessage,
       position: 'top',
       color: 'negative',
+      icon: 'error',
     });
   }
 }
