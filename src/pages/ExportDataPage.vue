@@ -1,13 +1,13 @@
 <template>
   <q-page class="q-pa-lg flex flex-center">
     <div style="width: 100%; max-width: 600px">
-      <q-card class="glass-card q-pa-lg text-white">
+      <q-card class="glass-card q-pa-lg text-theme-body">
         <q-card-section class="q-pa-none q-mb-md">
           <div class="row items-center q-mb-xs">
             <q-icon name="download" color="primary" size="28px" class="q-mr-sm" />
-            <div class="text-h6 text-weight-bold">Export Food Library</div>
+            <div class="text-h6 text-weight-bold text-theme-title">Export Food Library</div>
           </div>
-          <div class="text-caption text-grey-5">
+          <div class="text-caption text-theme-caption">
             Export your custom food database to the clipboard so you can back it up or restore it on
             other devices.
           </div>
@@ -21,7 +21,7 @@
               :label="item.label"
               v-model="item.value"
               :disable="!item.isActive"
-              dark
+              :dark="$q.dark.isActive"
               color="primary"
               class="text-weight-medium"
             >

@@ -2,12 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header
       flat
-      class="glass-header text-white"
-      style="
-        background: rgba(15, 23, 42, 0.65);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      "
+      class="glass-header"
     >
       <q-toolbar class="q-py-sm">
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
@@ -18,16 +13,6 @@
         </q-toolbar-title>
 
         <div class="row items-center q-gutter-sm">
-          <q-btn @click="router.push('/intake')" flat dense round icon="restaurant" color="primary">
-            <q-badge
-              v-if="store.intakes.length"
-              color="negative"
-              floating
-              rounded
-              class="text-weight-bold"
-              >{{ store.intakes.length }}</q-badge
-            >
-          </q-btn>
           <q-btn
             flat
             dense
@@ -44,11 +29,10 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      class="bg-dark"
-      style="border-right: 1px solid rgba(255, 255, 255, 0.08)"
+      class="theme-drawer"
     >
       <q-list class="q-px-sm q-py-md">
-        <q-item-label header class="text-weight-bold text-grey-5 q-mb-md">
+        <q-item-label header class="text-weight-bold text-theme-caption q-mb-md">
           Navigation
         </q-item-label>
 
@@ -57,7 +41,7 @@
           v-ripple
           @click="router.push('/')"
           :active="router.currentRoute.value.path === '/'"
-          active-class="text-primary bg-grey-9 rounded-borders"
+          active-class="text-primary rounded-borders"
           class="q-mb-sm"
           style="border-radius: 12px"
         >
@@ -74,7 +58,7 @@
           v-ripple
           @click="router.push('/my-intakes')"
           :active="router.currentRoute.value.path === '/my-intakes'"
-          active-class="text-primary bg-grey-9 rounded-borders"
+          active-class="text-primary rounded-borders"
           class="q-mb-sm"
           style="border-radius: 12px"
         >
@@ -83,7 +67,25 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-weight-medium">My Intakes</q-item-label>
-            <q-item-label caption class="text-grey-6">Record of your daily Intakes</q-item-label>
+            <q-item-label caption class="text-theme-caption">Record of your daily Intakes</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item
+          clickable
+          v-ripple
+          @click="router.push('/weekly-recap')"
+          :active="router.currentRoute.value.path === '/weekly-recap'"
+          active-class="text-primary rounded-borders"
+          class="q-mb-sm"
+          style="border-radius: 12px"
+        >
+          <q-item-section avatar>
+            <q-icon name="insert_chart" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-weight-medium">Weekly Recap</q-item-label>
+            <q-item-label caption class="text-theme-caption">Calorie trends over the last 7 days</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -92,7 +94,7 @@
           v-ripple
           @click="router.push('/import-food')"
           :active="router.currentRoute.value.path === '/import-food'"
-          active-class="text-primary bg-grey-9 rounded-borders"
+          active-class="text-primary rounded-borders"
           class="q-mb-sm"
           style="border-radius: 12px"
         >
@@ -101,7 +103,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-weight-medium">Import Data</q-item-label>
-            <q-item-label caption class="text-grey-6"
+            <q-item-label caption class="text-theme-caption"
               >Import Data from external sources</q-item-label
             >
           </q-item-section>
@@ -112,7 +114,7 @@
           v-ripple
           @click="router.push('/export-data')"
           :active="router.currentRoute.value.path === '/export-data'"
-          active-class="text-primary bg-grey-9 rounded-borders"
+          active-class="text-primary rounded-borders"
           class="q-mb-sm"
           style="border-radius: 12px"
         >
@@ -121,7 +123,7 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-weight-medium">Export Data</q-item-label>
-            <q-item-label caption class="text-grey-6">Export Data to external devices</q-item-label>
+            <q-item-label caption class="text-theme-caption">Export Data to external devices</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -147,12 +149,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useCounterStore } from 'src/stores/example-store';
 import { useQuasar } from 'quasar';
 
 const $q = useQuasar();
 const router = useRouter();
-const store = useCounterStore();
 
 const leftDrawerOpen = ref(false);
 
