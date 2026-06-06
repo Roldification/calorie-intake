@@ -1,13 +1,13 @@
 <template>
   <q-page class="q-pa-lg flex flex-center">
     <div style="width: 100%; max-width: 600px">
-      <q-card class="glass-card q-pa-lg text-white">
+      <q-card class="glass-card q-pa-lg text-theme-body">
         <q-card-section class="q-pa-none q-mb-md">
           <div class="row items-center q-mb-xs">
             <q-icon name="upload_file" color="primary" size="28px" class="q-mr-sm" />
-            <div class="text-h6 text-weight-bold">Import Food Library</div>
+            <div class="text-h6 text-weight-bold text-theme-title">Import Food Library</div>
           </div>
-          <div class="text-caption text-grey-5">
+          <div class="text-caption text-theme-caption">
             Paste a backup JSON configuration below to restore your custom food database library.
           </div>
         </q-card-section>
@@ -16,7 +16,7 @@
           <q-input
             type="textarea"
             filled
-            dark
+            :dark="$q.dark.isActive"
             v-model="importedData"
             label="JSON Data String"
             rows="8"
@@ -24,8 +24,8 @@
             style="font-family: monospace"
           />
           <div class="row justify-between items-center q-mt-sm">
-            <div class="text-caption text-grey-5">
-              Detected Size: <span class="text-weight-bold text-white">{{ charSize }}</span>
+            <div class="text-caption text-theme-caption">
+              Detected Size: <span class="text-weight-bold text-theme-title">{{ charSize }}</span>
             </div>
             <q-btn
               unelevated

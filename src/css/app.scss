@@ -14,25 +14,158 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-// Background alignment
-.body--dark {
-  background-color: #070a13 !important;
+// Background & theme alignments
+.body--light {
+  background-color: #f8fafc !important; // Slate 50
+  color: #334155 !important; // Slate 700
+  
+  --scrollbar-thumb: rgba(15, 23, 42, 0.15);
+  --scrollbar-track: rgba(241, 245, 249, 0.5);
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.65) !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 8px 32px 0 rgba(148, 163, 184, 0.1) !important;
+    
+    &:hover {
+      border-color: rgba(16, 185, 129, 0.3) !important;
+      box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.1) !important;
+    }
+  }
+
+  .text-theme-title {
+    color: #0f172a !important; // Slate 900
+  }
+  .text-theme-body {
+    color: #334155 !important; // Slate 700
+  }
+  .text-theme-subtitle {
+    color: #475569 !important; // Slate 600
+  }
+  .text-theme-caption {
+    color: #64748b !important; // Slate 500
+  }
+  .border-theme-light {
+    border: 1px solid rgba(15, 23, 42, 0.06) !important;
+  }
+  .bg-theme-hover:hover {
+    background: rgba(15, 23, 42, 0.03) !important;
+  }
+  .bg-theme-card-preview {
+    background: rgba(15, 23, 42, 0.02) !important;
+  }
+
+  .glass-header {
+    background: rgba(248, 250, 252, 0.7) !important;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+    color: #0f172a !important;
+  }
+
+  .theme-drawer {
+    background: #ffffff !important;
+    border-right: 1px solid rgba(15, 23, 42, 0.08) !important;
+    color: #0f172a !important;
+
+    .q-item {
+      color: #475569 !important;
+      
+      &.q-item--active {
+        background-color: rgba(16, 185, 129, 0.1) !important;
+        color: #10b981 !important;
+      }
+    }
+  }
+
+  .theme-dialog-card {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(15, 23, 42, 0.1) !important;
+    box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.1) !important;
+  }
 }
 
-// Premium glassmorphism card
+.body--dark {
+  background-color: #070a13 !important;
+  color: #cbd5e1 !important; // Slate 300
+
+  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
+  --scrollbar-track: rgba(7, 10, 19, 0.5);
+
+  .glass-card {
+    background: rgba(15, 23, 42, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25) !important;
+    
+    &:hover {
+      border-color: rgba(16, 185, 129, 0.2) !important;
+      box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.06) !important;
+    }
+  }
+
+  .text-theme-title {
+    color: #f8fafc !important; // Slate 50
+  }
+  .text-theme-body {
+    color: #cbd5e1 !important; // Slate 300
+  }
+  .text-theme-subtitle {
+    color: #94a3b8 !important; // Slate 400
+  }
+  .text-theme-caption {
+    color: #64748b !important; // Slate 500
+  }
+  .border-theme-light {
+    border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  }
+  .bg-theme-hover:hover {
+    background: rgba(255, 255, 255, 0.04) !important;
+  }
+  .bg-theme-card-preview {
+    background: rgba(255, 255, 255, 0.03) !important;
+  }
+
+  .glass-header {
+    background: rgba(15, 23, 42, 0.65) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+  }
+
+  .theme-drawer {
+    background: #0f172a !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+
+    .q-item {
+      color: #94a3b8 !important;
+      
+      &.q-item--active {
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: #10b981 !important;
+      }
+    }
+  }
+
+  .theme-dialog-card {
+    background: #0f172a !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+// Premium glassmorphism card baseline
 .glass-card {
-  background: rgba(15, 23, 42, 0.4);
+  border-radius: 20px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  // Default fallback (dark)
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
 }
 
 .glass-card:hover {
-  border-color: rgba(16, 185, 129, 0.2);
-  box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.06);
   transform: translateY(-2px);
 }
 
@@ -47,8 +180,6 @@ body {
 // Custom modern scrollbar (cross-browser compatible)
 body,
 .q-page {
-  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
-  --scrollbar-track: rgba(7, 10, 19, 0.5);
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
   scrollbar-width: thin;
 }
